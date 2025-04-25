@@ -166,6 +166,40 @@
         float: right;
       }
     }
+    
+    .image-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 24px;
+      margin-top: 24px;
+    }
+    
+    .image-grid > div {
+      background: none;
+      box-shadow: none;
+      border-radius: 8px;
+      text-align: center;
+    }
+    
+    .image-grid img {
+      width: 100%;
+      height: 220px;
+      object-fit: cover;
+      border-radius: 8px;
+      display: block;
+      margin: 0 auto;
+    }
+    
+    @media (max-width: 700px) {
+      .image-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    
+    
+    
+    
   </style>
 </head>
 
@@ -214,7 +248,8 @@
     <p>I enjoy writing poetry, exploring (astro-) photography, and a bit too much sports. Here are some glimpses of the same.</p>
 
     <h3>📜 Poems</h3>
-    <div id="poems-gallery">
+    <!-- Poems Section -->
+    <div class="image-grid">
       <div>
         <img src="poems/va-sundare.jpg" alt="Va Sun Dhare" />
         <p><em>"Va Sun Dhare"</em></p>
@@ -223,21 +258,25 @@
         <img src="poems/sketch1.jpg" alt="Shady Shadings" />
         <p><em>"Shady Shadings"</em></p>
       </div>
-      <p><a href="https://www.instagram.com/ento_ondu" target="_blank">For more →</a></p>
+      <!-- ...more images -->
     </div>
+    
+
+
 
     <h3>📸 Miscellaneous</h3>
     <div class="misc-gallery">
-      <div data-aos="zoom-in">
+      <div>
         <img src="photos/milky-way.jpg" alt="Milky Way" />
         <p>Milky Way</p>
         <p>(30 s exposure shot on mobile cam)</p>
       </div>
-      <div data-aos="zoom-in">
+      <div>
         <img src="photos/moon-ring.jpg" alt="Moon Ring" />
         <p>Moon Ring</p>
         <p>(A jet had just passed before leaving the trail)</p>
       </div>
+      <!-- ...more images -->
     </div>
   </section>
 
