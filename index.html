@@ -79,14 +79,17 @@
       color: #2c2c4a;
     }
 
+
     .side-by-side-container {
       display: flex;
       flex-wrap: wrap;
       gap: 40px;
       justify-content: center;
-      padding: 20px;
+      width: 100vw; /* or 100% */
+      margin-left: calc(-50vw + 50%); /* To make it truly edge-to-edge if inside a centered parent */
+      padding: 20px 0;
+      box-sizing: border-box;
     }
-
     .side-by-side-container section {
       background-color: #f8f9fc;
       padding: 30px;
@@ -95,11 +98,9 @@
       flex: 1 1 45%;
       max-width: 45%;
       transition: transform 0.3s;
+      box-sizing: border-box;
     }
 
-    .side-by-side-container section:hover {
-      transform: translateY(-5px);
-    }
 
     .misc-gallery {
       display: flex;
@@ -134,8 +135,9 @@
       .side-by-side-container {
         flex-direction: column;
         align-items: center;
+        width: 100vw;
+        margin-left: calc(-50vw + 50%);
       }
-
       .side-by-side-container section {
         max-width: 100%;
       }
@@ -203,7 +205,7 @@
         <p><em>"Shady shadings"</em></p>
       </div>
       <p>
-        <a href="https://www.instagram.com/ento_ondu" target="_blank">For more →</a>
+        <a href="https://www.instagram.com/your_instagram_handle" target="_blank">For more →</a>
       </p>
       <h3>📸 Miscellaneous</h3>
       <div class="misc-gallery">
