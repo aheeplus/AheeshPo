@@ -4,9 +4,7 @@
   <meta charset="UTF-8" />
   <title>Miscellaneous - ACH</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <!-- Font and AOS -->
   <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@500&display=swap" rel="stylesheet">
-  <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet" />
   <style>
     :root {
       --bg: #fdfdfd;
@@ -31,20 +29,30 @@
       color: var(--header-text);
       padding: 30px 20px;
       text-align: left;
+      position: relative;
     }
     h1 {
       font-family: 'Playfair Display', serif;
       color: var(--header-text);
       margin: 0 0 10px 0;
     }
-    .back-link {
+    .back-link, .back-btn {
       color: var(--link);
       text-decoration: none;
       font-weight: bold;
       margin-bottom: 20px;
       display: inline-block;
+      background: #ececf6;
+      border: none;
+      border-radius: 6px;
+      padding: 8px 18px;
+      cursor: pointer;
+      font-size: 1em;
+      transition: background 0.2s;
+      margin-right: 10px;
     }
-    .back-link:hover {
+    .back-link:hover, .back-btn:hover {
+      background: #dcdcf0;
       text-decoration: underline;
     }
     main {
@@ -71,10 +79,9 @@
       border-radius: 12px;
       box-shadow: 0 2px 12px rgba(0,0,0,0.06);
       overflow: hidden;
+      cursor: pointer;
       transition: box-shadow 0.2s;
-    }
-    .square-grid .grid-item:hover {
-      box-shadow: 0 8px 32px rgba(44,44,74,0.16);
+      position: relative;
     }
     .square-img-container {
       width: 100%;
@@ -89,10 +96,7 @@
       width: 100%;
       height: 100%;
       object-fit: cover;
-      transition: transform 0.3s cubic-bezier(.4,2,.6,.8);
-    }
-    .grid-item:hover .square-img-container img {
-      transform: scale(1.08);
+      display: block;
     }
     .caption {
       padding: 12px 10px 10px 10px;
@@ -101,37 +105,120 @@
       color: #555;
       font-style: italic;
     }
+    /* Modal styles */
+    .modal {
+      display: none;
+      position: fixed;
+      z-index: 9999;
+      left: 0; top: 0; width: 100vw; height: 100vh;
+      background: rgba(30,30,40,0.96);
+      align-items: center;
+      justify-content: center;
+      flex-direction: column;
+      animation: fadeIn 0.2s;
+    }
+    .modal.open {
+      display: flex;
+    }
+    .modal-img {
+      max-width: 90vw;
+      max-height: 70vh;
+      border-radius: 12px;
+      box-shadow: 0 4px 32px rgba(0,0,0,0.18);
+      margin-bottom: 18px;
+      background: #fff;
+    }
+    .modal-caption {
+      color: #f0f0f0;
+      font-size: 1.2em;
+      text-align: center;
+      font-style: italic;
+      margin-bottom: 24px;
+      max-width: 90vw;
+    }
+    .modal-close {
+      background: #fff;
+      color: #27235c;
+      border: none;
+      font-size: 1.3em;
+      padding: 8px 20px;
+      border-radius: 6px;
+      cursor: pointer;
+      font-weight: bold;
+      margin-bottom: 10px;
+      transition: background 0.2s;
+    }
+    .modal-close:hover {
+      background: #ececf6;
+    }
     @media (max-width: 700px) {
       main { padding: 18px 4px; }
       .section-title { font-size: 1.3em; }
+      .modal-img { max-height: 42vh; }
+      .modal-caption { font-size: 1em; }
+    }
+    @keyframes fadeIn {
+      from { opacity: 0; }
+      to   { opacity: 1; }
     }
   </style>
 </head>
 <body>
   <header>
-    <a href="index.html" class="back-link">&larr; Home</a>
+    <a href="index.html#THEetc" class="back-link">&larr; Back to THE etc.</a>
     <h1>Miscellaneous</h1>
   </header>
   <main>
     <div class="section-title">Odds & Ends</div>
     <div class="square-grid">
-      <!-- Example items, replace/add as you wish -->
-      <div class="grid-item">
+      <div class="grid-item" data-img="misc/sports-moment.jpg" data-caption="Victory at the inter-college football match">
         <div class="square-img-container">
           <img src="misc/sports-moment.jpg" alt="Sports Moment" />
         </div>
-        <div class="caption">A badminton day</div>
+        <div class="caption">Victory at the inter-college football match</div>
       </div>
-      <div class="grid-item">
+      <div class="grid-item" data-img="misc/random-sketch.jpg" data-caption="A random doodle from my notebook">
         <div class="square-img-container">
           <img src="misc/random-sketch.jpg" alt="Random Sketch" />
         </div>
-        <div class="caption">A random doodle</div>
+        <div class="caption">A random doodle from my notebook</div>
       </div>
-
+      <div class="grid-item" data-img="misc/astro-fun.jpg" data-caption="Star trails experiment with friends">
+        <div class="square-img-container">
+          <img src="misc/astro-fun.jpg" alt="Astro Fun" />
+        </div>
+        <div class="caption">Star trails experiment with friends</div>
+      </div>
       <!-- Add more grid-items as desired -->
     </div>
     <p style="margin-top:32px; color:#888;">More memories and fun stuff coming soon!</p>
   </main>
+
+  <!-- Modal for fullscreen image -->
+  <div class="modal" id="modal">
+    <button class="modal-close" id="modalClose">Close</button>
+    <img class="modal-img" id="modalImg" src="" alt="" />
+    <div class="modal-caption" id="modalCaption"></div>
+  </div>
+
+  <script>
+    // Modal logic
+    const modal = document.getElementById('modal');
+    const modalImg = document.getElementById('modalImg');
+    const modalCaption = document.getElementById('modalCaption');
+    const modalClose = document.getElementById('modalClose');
+    document.querySelectorAll('.grid-item').forEach(item => {
+      item.addEventListener('click', () => {
+        modalImg.src = item.getAttribute('data-img');
+        modalCaption.innerHTML = item.getAttribute('data-caption');
+        modal.classList.add('open');
+      });
+    });
+    modalClose.onclick = () => modal.classList.remove('open');
+    modal.onclick = (e) => { if (e.target === modal) modal.classList.remove('open'); };
+    document.addEventListener('keydown', e => {
+      if (e.key === 'Escape') modal.classList.remove('open');
+    });
+  </script>
 </body>
 </html>
