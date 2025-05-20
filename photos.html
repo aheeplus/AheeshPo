@@ -17,8 +17,6 @@
       --shadow: 0 8px 24px rgba(0, 0, 0, 0.06);
       --modal-bg: rgba(30,30,40,0.96);
       --modal-caption: #f0f0f0;
-      --modal-close-bg: #fff;
-      --modal-close-color: #27235c;
     }
     body.dark-mode {
       --bg: #191a23;
@@ -31,8 +29,6 @@
       --shadow: 0 8px 24px rgba(0, 0, 0, 0.3);
       --modal-bg: rgba(20,20,30,0.98);
       --modal-caption: #e0def4;
-      --modal-close-bg: #232136;
-      --modal-close-color: #fff;
     }
     body {
       margin: 0;
@@ -146,7 +142,7 @@
       position: fixed;
       z-index: 9999;
       left: 0; top: 0; width: 100vw; height: 100vh;
-      background: var(--modal-bg);
+      background: var(--modal-bg, rgba(30,30,40,0.96));
       align-items: center;
       justify-content: center;
       flex-direction: column;
@@ -162,44 +158,45 @@
       box-shadow: 0 4px 32px rgba(0,0,0,0.18);
       margin-bottom: 18px;
       background: #fff;
+      z-index: 10001;
     }
     .modal-caption {
-      color: var(--modal-caption);
+      color: var(--modal-caption, #f0f0f0);
       font-size: 1.2em;
       text-align: center;
       font-style: italic;
       margin-bottom: 24px;
       max-width: 90vw;
     }
-    .modal-close {
+    .modal-arrow {
       position: absolute;
-      top: 24px;
-      right: 32px;
-      background: var(--modal-close-bg);
-      color: var(--modal-close-color);
-      border: none;
-      font-size: 1.7em;
-      padding: 6px 18px 6px 14px;
-      border-radius: 6px;
-      cursor: pointer;
-      font-weight: bold;
-      z-index: 10001;
-      transition: background 0.2s, color 0.2s;
-      box-shadow: 0 2px 8px rgba(0,0,0,0.10);
-    }
-    .modal-close:hover {
-      background: #ececf6;
-    }
-    body.dark-mode .modal-close:hover {
-      background: #39386b;
+      top: 50%;
+      transform: translateY(-50%);
+      font-size: 2.5em;
       color: #fff;
+      background: rgba(30,30,40,0.5);
+      border-radius: 50%;
+      width: 1.4em;
+      height: 1.4em;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      user-select: none;
+      z-index: 10002;
+      transition: background 0.2s, color 0.2s;
     }
+    .modal-arrow-left { left: 32px; }
+    .modal-arrow-right { right: 32px; }
+    .modal-arrow:hover { background: #232136; color: #a3a3ff; }
     @media (max-width: 700px) {
       main { padding: 18px 4px; }
       .section-title { font-size: 1.3em; }
       .modal-img { max-height: 42vh; }
       .modal-caption { font-size: 1em; }
-      .modal-close { top: 12px; right: 10px; font-size: 1.3em; }
+      .modal-arrow { font-size: 2em; left: 8px; right: 8px; }
+      .modal-arrow-left { left: 8px; }
+      .modal-arrow-right { right: 8px; }
     }
     @keyframes fadeIn {
       from { opacity: 0; }
@@ -231,10 +228,11 @@
     </div>
   </main>
 
-  <!-- Modal for fullscreen image -->
+  <!-- Modal for fullscreen image with navigation -->
   <div class="modal" id="modal">
-    <button class="modal-close" id="modalClose" title="Close">&times;</button>
+    <span class="modal-arrow modal-arrow-left" id="modalPrev" title="Previous">&#8592;</span>
     <img class="modal-img" id="modalImg" src="" alt="" />
+    <span class="modal-arrow modal-arrow-right" id="modalNext" title="Next">&#8594;</span>
     <div class="modal-caption" id="modalCaption"></div>
   </div>
 
@@ -244,22 +242,45 @@
         (!localStorage.getItem('theme') && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
       document.body.classList.add('dark-mode');
     }
-    // Modal logic
+
     const modal = document.getElementById('modal');
     const modalImg = document.getElementById('modalImg');
     const modalCaption = document.getElementById('modalCaption');
-    const modalClose = document.getElementById('modalClose');
-    document.querySelectorAll('.grid-item').forEach(item => {
-      item.addEventListener('click', () => {
-        modalImg.src = item.getAttribute('data-img');
-        modalCaption.innerHTML = item.getAttribute('data-caption');
-        modal.classList.add('open');
-      });
+    const modalPrev = document.getElementById('modalPrev');
+    const modalNext = document.getElementById('modalNext');
+    const gridItems = Array.from(document.querySelectorAll('.grid-item'));
+
+    let currentIndex = 0;
+
+    function openModal(index) {
+      currentIndex = index;
+      const item = gridItems[currentIndex];
+      modalImg.src = item.getAttribute('data-img');
+      modalCaption.innerHTML = item.getAttribute('data-caption');
+      modal.classList.add('open');
+    }
+
+    gridItems.forEach((item, idx) => {
+      item.addEventListener('click', () => openModal(idx));
     });
-    modalClose.onclick = () => modal.classList.remove('open');
+
+    function showPrev() {
+      currentIndex = (currentIndex - 1 + gridItems.length) % gridItems.length;
+      openModal(currentIndex);
+    }
+    function showNext() {
+      currentIndex = (currentIndex + 1) % gridItems.length;
+      openModal(currentIndex);
+    }
+    modalPrev.onclick = (e) => { e.stopPropagation(); showPrev(); };
+    modalNext.onclick = (e) => { e.stopPropagation(); showNext(); };
+
     modal.onclick = (e) => { if (e.target === modal) modal.classList.remove('open'); };
     document.addEventListener('keydown', e => {
+      if (!modal.classList.contains('open')) return;
       if (e.key === 'Escape') modal.classList.remove('open');
+      if (e.key === 'ArrowLeft') showPrev();
+      if (e.key === 'ArrowRight') showNext();
     });
   </script>
 </body>
