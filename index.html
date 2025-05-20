@@ -175,6 +175,21 @@
         float: right;
       }
     }
+
+
+
+    .section-link {
+      display: inline-block;
+      margin: 16px 0;
+      font-weight: bold;
+      color: var(--link);
+      font-size: 1.1em;
+    }
+    .section-link:hover {
+      text-decoration: underline;
+      color: var(--nav-link-hover);
+    }
+
   </style>
 </head>
 
@@ -221,34 +236,14 @@
   <section id="THEetc" data-aos="fade-left">
     <h2 class="section-title">THE etc.</h2>
     <p>I enjoy writing poetry, exploring (astro-) photography, and a bit too much sports. Here are some glimpses of the same.</p>
-
+  
     <h3>📜 Poems</h3>
-    <div class="image-grid">
-      <div>
-        <img src="poems/va-sundare.jpg" alt="Va Sun Dhare" />
-        <p><em>"Va Sun Dhare"</em></p>
-      </div>
-      <div>
-        <img src="poems/sketch1.jpg" alt="Shady Shadings" />
-        <p><em>"Shady Shadings"</em></p>
-      </div>
-    </div>
-    <p><a href="https://www.instagram.com/ento_ondu" target="_blank">For more →</a></p>
-
+    <p><a href="poems.html" class="section-link">See all poems &rarr;</a></p>
+  
     <h3>📸 Miscellaneous</h3>
-    <div class="image-grid">
-      <div data-aos="zoom-in">
-        <img src="photos/milky-way.jpg" alt="Milky Way" />
-        <p>Milky Way</p>
-        <p>(30 s exposure shot on mobile cam)</p>
-      </div>
-      <div data-aos="zoom-in">
-        <img src="photos/moon-ring.jpg" alt="Moon Ring" />
-        <p>Moon Ring</p>
-        <p>(A jet had just passed before leaving the trail)</p>
-      </div>
-    </div>
+    <p><a href="photos.html" class="section-link">See all photos &rarr;</a></p>
   </section>
+  
 
   <!-- AOS Script -->
   <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
