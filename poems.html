@@ -4,7 +4,6 @@
   <meta charset="UTF-8" />
   <title>Poems - ACH</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <!-- Font and AOS -->
   <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@500&display=swap" rel="stylesheet">
   <style>
     :root {
@@ -16,6 +15,24 @@
       --section-title: #2c2c4a;
       --link: #4a4a8e;
       --shadow: 0 8px 24px rgba(0, 0, 0, 0.06);
+      --modal-bg: rgba(30,30,40,0.96);
+      --modal-caption: #f0f0f0;
+      --modal-close-bg: #fff;
+      --modal-close-color: #27235c;
+    }
+    body.dark-mode {
+      --bg: #191a23;
+      --text: #e4e4ef;
+      --header-bg: #232136;
+      --header-text: #e0def4;
+      --section-bg: #232136;
+      --section-title: #e0def4;
+      --link: #a3a3ff;
+      --shadow: 0 8px 24px rgba(0, 0, 0, 0.3);
+      --modal-bg: rgba(20,20,30,0.98);
+      --modal-caption: #e0def4;
+      --modal-close-bg: #232136;
+      --modal-close-color: #fff;
     }
     body {
       margin: 0;
@@ -24,6 +41,7 @@
       background: var(--bg);
       color: var(--text);
       min-height: 100vh;
+      transition: background 0.3s, color 0.3s;
     }
     header {
       background: var(--header-bg);
@@ -37,7 +55,7 @@
       color: var(--header-text);
       margin: 0 0 10px 0;
     }
-    .back-link, .back-btn {
+    .back-link {
       color: var(--link);
       text-decoration: none;
       font-weight: bold;
@@ -52,9 +70,15 @@
       transition: background 0.2s;
       margin-right: 10px;
     }
-    .back-link:hover, .back-btn:hover {
+    body.dark-mode .back-link {
+      background: #232136;
+    }
+    .back-link:hover {
       background: #dcdcf0;
       text-decoration: underline;
+    }
+    body.dark-mode .back-link:hover {
+      background: #39386b;
     }
     main {
       background: var(--section-bg);
@@ -63,6 +87,7 @@
       border-radius: 15px;
       box-shadow: var(--shadow);
       padding: 40px 20px;
+      transition: background 0.3s;
     }
     .section-title {
       font-size: 2em;
@@ -84,6 +109,9 @@
       transition: box-shadow 0.2s;
       position: relative;
     }
+    body.dark-mode .square-grid .grid-item {
+      background: #232136;
+    }
     .square-img-container {
       width: 100%;
       aspect-ratio: 1/1;
@@ -92,6 +120,9 @@
       display: flex;
       align-items: center;
       justify-content: center;
+    }
+    body.dark-mode .square-img-container {
+      background: #39386b;
     }
     .square-img-container img {
       width: 100%;
@@ -106,13 +137,16 @@
       color: #555;
       font-style: italic;
     }
+    body.dark-mode .caption {
+      color: #b2b2d6;
+    }
     /* Modal styles */
     .modal {
       display: none;
       position: fixed;
       z-index: 9999;
       left: 0; top: 0; width: 100vw; height: 100vh;
-      background: rgba(30,30,40,0.96);
+      background: var(--modal-bg);
       align-items: center;
       justify-content: center;
       flex-direction: column;
@@ -130,7 +164,7 @@
       background: #fff;
     }
     .modal-caption {
-      color: #f0f0f0;
+      color: var(--modal-caption);
       font-size: 1.2em;
       text-align: center;
       font-style: italic;
@@ -138,25 +172,34 @@
       max-width: 90vw;
     }
     .modal-close {
-      background: #fff;
-      color: #27235c;
+      position: absolute;
+      top: 24px;
+      right: 32px;
+      background: var(--modal-close-bg);
+      color: var(--modal-close-color);
       border: none;
-      font-size: 1.3em;
-      padding: 8px 20px;
+      font-size: 1.7em;
+      padding: 6px 18px 6px 14px;
       border-radius: 6px;
       cursor: pointer;
       font-weight: bold;
-      margin-bottom: 10px;
-      transition: background 0.2s;
+      z-index: 10001;
+      transition: background 0.2s, color 0.2s;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.10);
     }
     .modal-close:hover {
       background: #ececf6;
+    }
+    body.dark-mode .modal-close:hover {
+      background: #39386b;
+      color: #fff;
     }
     @media (max-width: 700px) {
       main { padding: 18px 4px; }
       .section-title { font-size: 1.3em; }
       .modal-img { max-height: 42vh; }
       .modal-caption { font-size: 1em; }
+      .modal-close { top: 12px; right: 10px; font-size: 1.3em; }
     }
     @keyframes fadeIn {
       from { opacity: 0; }
@@ -191,12 +234,17 @@
 
   <!-- Modal for fullscreen image -->
   <div class="modal" id="modal">
-    <button class="modal-close" id="modalClose">Close</button>
+    <button class="modal-close" id="modalClose" title="Close">&times;</button>
     <img class="modal-img" id="modalImg" src="" alt="" />
     <div class="modal-caption" id="modalCaption"></div>
   </div>
 
   <script>
+    // Theme sync with main page
+    if (localStorage.getItem('theme') === 'dark' ||
+        (!localStorage.getItem('theme') && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
+      document.body.classList.add('dark-mode');
+    }
     // Modal logic
     const modal = document.getElementById('modal');
     const modalImg = document.getElementById('modalImg');
