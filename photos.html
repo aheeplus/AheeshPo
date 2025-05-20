@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Photos - ACH</title>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@500&display=swap" rel="stylesheet">
+  <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet" />
+  <style>
+    body { font-family: Georgia, serif; background: #fdfdfd; color: #333; }
+    h1 { font-family: 'Playfair Display', serif; }
+    .image-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 24px; }
+    .image-grid img { width: 100%; border-radius: 8px; }
+    .back-link { margin: 24px 0; display: inline-block; }
+    @media (max-width: 700px) { .image-grid { grid-template-columns: 1fr; } }
+  </style>
+</head>
+<body>
+  <a href="index.html" class="back-link">← Back to Home</a>
+  <h1>Photos</h1>
+  <div class="image-grid">
+    <div>
+      <img src="photos/milky-way.jpg" alt="Milky Way" />
+      <p>Milky Way<br>(30 s exposure shot on mobile cam)</p>
+    </div>
+    <div>
+      <img src="photos/moon-ring.jpg" alt="Moon Ring" />
+      <p>Moon Ring<br>(A jet had just passed before leaving the trail)</p>
+    </div>
+  </div>
+</body>
+</html>
